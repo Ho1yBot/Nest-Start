@@ -15,7 +15,35 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  name     String
+  posts    Post[]
+  comments Comment[]
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+}
+
+model Post {
+  id         Int       @id @default(autoincrement())
+  title      String
+  content    String
+  authorID   Int
+  categoryID Int
+  author     User      @relation(fields: [authorID], references: [id])
+  category   Category  @relation(fields: [categoryID], references: [id])
+  comments   Comment[]
+}
+
+model Comment {
+  id     Int    @id @default(autoincrement())
+  text   String
+  postId Int
+  post   Post   @relation(fields: [postId], references: [id])
+  User   User?  @relation(fields: [userId], references: [id])
+  userId Int?
 }
